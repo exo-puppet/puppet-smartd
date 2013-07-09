@@ -16,22 +16,31 @@
 class smartd::params {
   $autoupdate         = false
   $package_name       = 'smartmontools'
-  $service_name       = 'smartd'
   $devicescan         = true
   $devicescan_options = false
-  $devices            = []
-  $device_opts        = {}
+  $devices            = [
+    ]
+  $device_opts        = {
+  }
   $mail_to            = 'root'
   $warning_schedule   = 'daily' # other choices: once, diminishing
   $enable_monit       = false
 
   case $::osfamily {
-    'FreeBSD': {
-      $config_file = '/usr/local/etc/smartd.conf'
+    'FreeBSD' : {
+      $config_file  = '/usr/local/etc/smartd.conf'
+      $service_name = 'smartd'
     }
-    'Debian', 'RedHat': {
-      $config_file = '/etc/smartd.conf'
+    'RedHat'  : {
+      $config_file  = '/etc/smartd.conf'
+      $service_name = 'smartd'
     }
-    default: { fail("smartd: unsupported OS family ${::osfamily}}") }
+    'Debian'  : {
+      $config_file  = '/etc/smartd.conf'
+      $service_name = 'smartmontools'
+    }
+    default   : {
+      fail("smartd: unsupported OS family ${::osfamily}}")
+    }
   }
 }
