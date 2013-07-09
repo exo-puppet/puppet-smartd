@@ -1,5 +1,5 @@
 name 'csail-smartd'
-version '0.0.1'
+version '0.0.2'
 source 'http://tig.csail.mit.edu/git-public/smartd.git'
 author 'MIT Computer Science & Artificial Intelligence Laboratory'
 license 'MIT'
