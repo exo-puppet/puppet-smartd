@@ -5,21 +5,28 @@
 # example "mfiutil show config" to write a parser for and test
 # against.
 def megacli_usable?
-  (File.writable?('/dev/megaraid_sas_ioctl_node') or
-      File.writable?('/dev/megadev0')) and
+  (File.writable?('/dev/megaraid_sas_ioctl_node') or File.writable?('/dev/megadev0')) and (Facter::Util::Resolution.which('MegaCli') or Facter::Util::Resolution.which('megacli'))
+end
+
+# Some systems have the exec called megacli and others MegaCli
+def megacli_path
+  if Facter::Util::Resolution.which('megacli').nil?
     Facter::Util::Resolution.which('MegaCli')
+  else
+    Facter::Util::Resolution.which('megacli')
+  end
 end
 
 def lsscsi_usable?
-    Facter::Util::Resolution.which('lsscsi')
+  Facter::Util::Resolution.which('lsscsi')
 end
 
 Facter.add(:megaraid_physical_drives) do
-  confine :kernel => [ :Linux ]  
+  confine :kernel => [ :Linux ]
   setcode do
     pds = []
     if megacli_usable?
-      list = Facter::Util::Resolution.exec('MegaCli -PDList -aALL')
+      list = Facter::Util::Resolution.exec("#{ megacli_path } -PDList -aALL")
       list.each_line do |line|
         if line =~ /^Device Id:\s+(\d+)/
           pds.push($1)
@@ -34,7 +41,7 @@ Facter.add(:megaraid_adapters) do
   confine :kernel => [ :Linux ]
   setcode do
     if megacli_usable?
-      count = Facter::Util::Resolution.exec('MegaCli -adpCount 2>&1')
+      count = Facter::Util::Resolution.exec("#{ megacli_path } -adpCount 2>&1")
       count =~ /Controller Count:\s+(\d+)\./ ? $1 : '0'
     else
       nil
