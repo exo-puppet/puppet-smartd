@@ -182,11 +182,11 @@ class smartd ($ensure       = 'present',
   }
 
   # Let monit monitor smartd, if configured.
-  if $enable_monit {
-    @monit::monitor {$service_name:
-      ensure  => $file_ensure,
-      pidfile => "/var/run/${service_name}.pid",
-      tag     => 'default',
-    }
-  }
+  #if $enable_monit {
+  #  @monit::monitor {$service_name:
+  #    ensure  => $file_ensure,
+  #    pidfile => "/var/run/${service_name}.pid",
+  #    tag     => 'default',
+  #  }
+  #}
 }
