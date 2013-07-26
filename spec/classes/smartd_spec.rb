@@ -13,8 +13,7 @@ describe 'smartd' do
       should contain_file('/etc/smartd.conf')\
         .with_content(<<-END.gsub(/^\s+/, ""))
           # Managed by Puppet -- do not edit!
-          DEFAULT -m root -M daily
-          DEVICESCAN
+          DEVICESCAN -m root -M daily
         END
     end
   end
@@ -37,9 +36,8 @@ describe 'smartd' do
       should contain_file('/etc/smartd.conf')\
         .with_content(<<-END.gsub(/^\s+/, ""))
           # Managed by Puppet -- do not edit!
-          DEFAULT -m root -M daily
-          /dev/sda -d sat+megaraid,1
-          /dev/sda -d sat+megaraid,2
+          /dev/sda -m root -M daily -d megaraid,1
+          /dev/sda -m root -M daily -d megaraid,2
           DEVICESCAN
         END
     end
@@ -69,9 +67,8 @@ describe 'smartd' do
       should contain_file('/etc/smartd.conf')\
         .with_content(<<-END.gsub(/^\s+/, ""))
           # Managed by Puppet -- do not edit!
-          DEFAULT -m root -M daily
-          /dev/sda -d sat+megaraid,1 -I 194
-          /dev/sda -d sat+megaraid,2 -I 194
+          /dev/sda -m root -M daily -d megaraid,1 -I 194
+          /dev/sda -m root -M daily -d megaraid,2 -I 194
           DEVICESCAN
         END
     end
