@@ -59,7 +59,7 @@ Facter.add(:megaraid_virtual_drives) do
   confine :kernel => [ :Linux ]
   setcode do
     if lsscsi_usable?
-      list = Facter::Util::Resolution.exec('lsscsi | awk \'{ if($2 == "disk" && $3 == "LSI") { print $6 } }\'')
+      list = Facter::Util::Resolution.exec('lsscsi | awk \'{ if($2 == "disk" && ($3 == "LSI" || $3 == "DELL")) { print $7 } }\'')
       list.map(&:chomp).sort.join(',')
     end
   end
